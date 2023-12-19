@@ -13,25 +13,10 @@ DEFINE_LOG_CATEGORY(VIMRLogInternal);
 
 void FVIMRUE5Module::StartupModule()
 {
-	const FString VIMR_ROOT_ENV_VAR = "VIMR_ROOT_09";
-
-	FString BaseDir = IPluginManager::Get().FindPlugin("VIMRUE5")->GetBaseDir();
-  const FString VIMR_ROOT = FPlatformMisc::GetEnvironmentVariable(*VIMR_ROOT_ENV_VAR);
-
-
-	if(VIMR_ROOT.IsEmpty())
-	{
-	  UE_LOG(VIMRLog, Error, TEXT("Environment variable '%s' not found"), *VIMR_ROOT_ENV_VAR);
-		FMessageDialog::Open(EAppMsgType::Ok, LOCTEXT("ThirdPartyLibraryError", "VIMR environment variable not found"));
-		return;
-	}
-
 	FString LibraryPath;
 #if PLATFORM_WINDOWS
-	LibraryPath = FPaths::Combine(*VIMR_ROOT, TEXT("bin\\vimr.dll"));
+	LibraryPath = FPaths::Combine(FPaths::ProjectDir(), TEXT("\\Plugins\\VIMRUE5\\Binaries\\Win64\\vimr.dll"));
 #endif // PLATFORM_WINDOWS
-
-	UE_LOG(VIMRLog, Log, TEXT("%s: %s"), *VIMR_ROOT_ENV_VAR, *VIMR_ROOT);
 
 	if(!FPaths::FileExists(*LibraryPath))
 	{
