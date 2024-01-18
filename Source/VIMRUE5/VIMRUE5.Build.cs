@@ -6,7 +6,7 @@ public class VIMRUE5 : ModuleRules
 {
 	public VIMRUE5(ReadOnlyTargetRules Target) : base(Target)
 	{
-		PublicIncludePaths.Add("$(ProjectDir)/VIMR/lib/include/" );
+		PublicIncludePaths.Add("$(ProjectDir)/VIMR/lib/include/");
 		PublicAdditionalLibraries.Add("$(PluginDir)/Binaries/Win64/vimr.lib");
 
 		// Delay-load the DLL, so we can load it from the right place first
