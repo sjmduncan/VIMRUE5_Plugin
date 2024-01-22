@@ -69,7 +69,7 @@ void AVIMRActor::BeginPlay()
   root->Mobility = EComponentMobility::Movable;
 }
 
-bool AVIMRActor::InitVimrComponent()
+bool AVIMRActor::InitVimrComponent(FString _VNetIDSuffix)
 {
   FString pVIMRInstanceConfigFile, pVIMRComponentID, pVIMRLogFolder, pVIMRDataFolder, pVNetID, pVNetServerAddr;
   if(FParse::Value(FCommandLine::Get(), TEXT("VIMRConfigFile"), pVIMRInstanceConfigFile, false))
@@ -106,7 +106,8 @@ bool AVIMRActor::InitVimrComponent()
   if(FParse::Value(FCommandLine::Get(), TEXT("-VNetID"), pVNetID, false))
   {
     UE_LOG(VIMRLog, Warning, TEXT("Using alternate VNet ID for telepresence \"%s\""), *pVNetID);
-    VNetID = pVNetID;
+    VNetID = pVNetID + _VNetIDSuffix;
+    
   }
   UE_LOG(VIMRLog, Log, TEXT("Tele-co-presence VNetID: %s"), *VNetID);
 

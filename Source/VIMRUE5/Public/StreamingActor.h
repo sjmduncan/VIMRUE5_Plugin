@@ -31,7 +31,7 @@ public:
   bool NewPoseToSend = false; 
 
   UFUNCTION(BlueprintCallable, Category = "VIMRStream")
- 	bool InitComponent();
+ 	bool InitComponent(FString _VNetIDSuffix = "");
 
   UFUNCTION(BlueprintCallable, Category = "VIMRStream")
  	bool InitPeerStream(FString _peerInstanceID);

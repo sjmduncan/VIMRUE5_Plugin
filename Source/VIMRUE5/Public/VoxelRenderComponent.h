@@ -6,7 +6,7 @@
 #include "VoxelRenderComponent.generated.h"
 
 
-#define MAX_RENDERER_VOXELS (4 * 16384)
+#define MAX_RENDERER_VOXELS (12 * 16384)
 //12*16384 = 196608 = max voxels per renderer
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

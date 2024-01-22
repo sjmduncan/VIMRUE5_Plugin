@@ -30,7 +30,7 @@ public:
  	bool InitPeerStream(FString _peerInstanceID);
 
   UFUNCTION(BlueprintCallable, Category = "VIMRStream")
- 	bool InitComponent();
+ 	bool InitComponent(FString _VNetIDSuffix = "");
 protected:
   virtual void BeginPlay() override;
   VIMR::VoxStreamReceiverUESafe *stream = nullptr;

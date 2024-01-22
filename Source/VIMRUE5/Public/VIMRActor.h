@@ -43,10 +43,10 @@ public:
 	bool ShowHUDText = true;
 	// Maximum number of voxels which can be rendered (this is set in VIMRActor.h)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
-	int NumVoxels = MAX_RENDERER_VOXELS;
+	int NumVoxels = 2 * MAX_RENDERER_VOXELS;
 	//The minimum number of voxel render components required to render all the voxels (computed from NumVoxels)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
-	int NumRenderers = 1;
+	int NumRenderers = 2;
 	//The minimum number of voxel render components required to render all the voxels (computed from NumVoxels)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
 	int NumBuffersPerrenderer = 4;
@@ -102,7 +102,7 @@ public:
 	TMap<int32, FTransform> VRDevicePoses;
 protected:
 	bool useLocalConfig = false;
-	bool InitVimrComponent();
+	bool InitVimrComponent(FString _VNetIDSuffix);
 	void CopyVoxelsToRenderBuffer(VIMR::VoxelMessage& _v);
 	RingBuffer<TArray<RenderBuffer>> * tmp_render_buffers;
 	TArray<RenderBuffer> * current_render_buffer;

@@ -61,9 +61,9 @@ bool ARemoteStreamingActor::InitPeerStream(FString _peerInstanceID)
   return true;
 }
 
-bool ARemoteStreamingActor::InitComponent()
+bool ARemoteStreamingActor::InitComponent(FString _VNetIDSuffix)
 {
-  InitVimrComponent();
+  InitVimrComponent(_VNetIDSuffix);
   bool isbad = false;
   if(stream){
     UE_LOG(VIMRLog, Error, TEXT("RemoteStreamingActor: stream already initialized"));

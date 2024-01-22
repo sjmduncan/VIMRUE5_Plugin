@@ -23,9 +23,9 @@ void AStreamingActor::Tick(float DeltaTime)
   }
 }
 
-bool AStreamingActor::InitComponent()
+bool AStreamingActor::InitComponent(FString _VNetIDSuffix)
 {
-  InitVimrComponent();
+  InitVimrComponent(_VNetIDSuffix);
   // can't be reinitialising stuff
   if(vox_merge) return false;
   AHUD* extantHUD = nullptr;
