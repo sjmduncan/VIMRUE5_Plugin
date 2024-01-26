@@ -27,7 +27,10 @@ bool AStreamingActor::InitComponent(FString _VNetIDSuffix)
 {
   InitVimrComponent(_VNetIDSuffix);
   // can't be reinitialising stuff
-  if(vox_merge) return false;
+  if(vox_merge){
+    UE_LOG(VIMRLog, Log, TEXT("vox_merge has already been initialised for vnet_suffix: %s"), *_VNetIDSuffix);
+    return false;
+  }
   AHUD* extantHUD = nullptr;
   auto * world = GetWorld();
   APlayerController * firstPC = nullptr;

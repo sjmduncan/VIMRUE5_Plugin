@@ -43,10 +43,10 @@ public:
 	bool ShowHUDText = true;
 	// Maximum number of voxels which can be rendered (this is set in VIMRActor.h)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
-	int NumVoxels = 2 * MAX_RENDERER_VOXELS;
+	int NumVoxels = 3 * MAX_RENDERER_VOXELS;
 	//The minimum number of voxel render components required to render all the voxels (computed from NumVoxels)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
-	int NumRenderers = 2;
+	int NumRenderers = 3;
 	//The minimum number of voxel render components required to render all the voxels (computed from NumVoxels)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
 	int NumBuffersPerrenderer = 4;
@@ -62,7 +62,7 @@ public:
 	FString LogFolder{};
 	// Component ID to include in the log file (this is not the same as the ComponentID in the config file)
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMR")
-	FString LogID{};
+	FString LogID = "VIMRInternal";
 	// Component ID to include in the log file (this is not the same as the ComponentID in the config file)
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMR")
 	FString InstanceID{};
@@ -100,9 +100,10 @@ public:
 	FString DataFolder{};
 
 	TMap<int32, FTransform> VRDevicePoses;
+	UFUNCTION(BlueprintCallable, Category = "VIMR")
+	bool InitVimrComponent(FString _VNetIDSuffix);
 protected:
 	bool useLocalConfig = false;
-	bool InitVimrComponent(FString _VNetIDSuffix);
 	void CopyVoxelsToRenderBuffer(VIMR::VoxelMessage& _v);
 	RingBuffer<TArray<RenderBuffer>> * tmp_render_buffers;
 	TArray<RenderBuffer> * current_render_buffer;
