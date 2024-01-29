@@ -43,10 +43,10 @@ public:
 	bool ShowHUDText = true;
 	// Maximum number of voxels which can be rendered (this is set in VIMRActor.h)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
-	int NumVoxels = 3 * MAX_RENDERER_VOXELS;
+	int NumVoxels = 1 * MAX_RENDERER_VOXELS;
 	//The minimum number of voxel render components required to render all the voxels (computed from NumVoxels)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
-	int NumRenderers = 3;
+	int NumRenderers = 1;
 	//The minimum number of voxel render components required to render all the voxels (computed from NumVoxels)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
 	int NumBuffersPerrenderer = 4;
