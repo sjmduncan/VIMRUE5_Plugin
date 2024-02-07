@@ -102,6 +102,16 @@ bool AStreamingActor::InitPeerStream(FString _peerInstanceID)
   return vox_merge->init_remote_stream(TCHAR_TO_ANSI(*_peerInstanceID),TCHAR_TO_ANSI(*VNetID), TCHAR_TO_ANSI(*VNetAddr), VNetIsLAN);
 }
 
+bool AStreamingActor::RecordVoxelVideo(FString _path_out)
+{
+  if(!vox_merge) return false;
+  return vox_merge->start_recording(TCHAR_TO_ANSI(*_path_out));
+}
+void AStreamingActor::StopRecordingVoxelVideo()
+{
+  if(vox_merge) vox_merge->stop_recording();
+}
+
 void AStreamingActor::BeginPlay()
 {
   Super::BeginPlay();

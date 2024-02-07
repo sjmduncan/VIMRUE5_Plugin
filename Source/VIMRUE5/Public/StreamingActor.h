@@ -35,6 +35,12 @@ public:
 
   UFUNCTION(BlueprintCallable, Category = "VIMRStream")
  	bool InitPeerStream(FString _peerInstanceID);
+
+  UFUNCTION(BlueprintCallable, Category = "VIMRStream")
+  bool RecordVoxelVideo(FString _path_out);
+  
+  UFUNCTION(BlueprintCallable, Category = "VIMRStream")
+  void StopRecordingVoxelVideo();
 protected:
   virtual void BeginPlay() override;
   VIMR::VoxMergeUESafe *vox_merge = nullptr;
