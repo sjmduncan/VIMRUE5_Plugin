@@ -41,6 +41,9 @@ public:
   
   UFUNCTION(BlueprintCallable, Category = "VIMRStream")
   void StopRecordingVoxelVideo();
+
+  UFUNCTION(BlueprintCallable, Category = "VIMRStream")
+  bool IsVoxelVideoRecording();
 protected:
   virtual void BeginPlay() override;
   VIMR::VoxMergeUESafe *vox_merge = nullptr;

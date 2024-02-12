@@ -60,8 +60,9 @@ bool AStreamingActor::InitComponent(FString _VNetIDSuffix)
   InstanceID = FString(ANSI_TO_TCHAR(inst_id));
   vox_merge->set_vox_sink([this](VIMR::VoxelMessage* _v)
   {
-    SetHUDText(FString::Printf(TEXT("SRC: %s\nframe:   %lld\nvox size: %.0fmm\nnum vox: %i\nFPS:    %.2f"), 
-      *VNetID, 
+    SetHUDText(FString::Printf(TEXT("SRC: %s %hs\nframe:   %lld\nvox size: %.0fmm\nnum vox: %i\nFPS:    %.2f"), 
+      *VNetID,
+      IsVoxelVideoRecording() ? "rec" : "",
       _v->frame_number,
       _v->encoding.get_vox_mm(),
       _v->octree.vox_count(),
@@ -110,6 +111,12 @@ bool AStreamingActor::RecordVoxelVideo(FString _path_out)
 void AStreamingActor::StopRecordingVoxelVideo()
 {
   if(vox_merge) vox_merge->stop_recording();
+}
+
+bool AStreamingActor::IsVoxelVideoRecording()
+{
+  if(vox_merge) return vox_merge->is_recording();
+  return false;
 }
 
 void AStreamingActor::BeginPlay()
