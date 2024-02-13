@@ -21,6 +21,14 @@ void AStreamingActor::Tick(float DeltaTime)
     }
     tmp_render_buffers->try_advance_head();
   }
+  if(vox_merge && vox_merge->is_recording())
+  {
+    const auto tx = GetActorTransform();
+    const auto r = tx.GetRotation();
+    const auto t = tx.GetTranslation();
+    VIMR::Pose p = VIMR::Pose(ms_now - ms_rec_start, VIMR::PoseType::ActorPose, t.X, t.Y, t.Z, r.W, r.X, r.Y, r.Z);
+    vox_merge->record_pose(&p);
+  }
 }
 
 bool AStreamingActor::InitComponent(FString _VNetIDSuffix)
@@ -106,6 +114,7 @@ bool AStreamingActor::InitPeerStream(FString _peerInstanceID)
 bool AStreamingActor::RecordVoxelVideo(FString _path_out)
 {
   if(!vox_merge) return false;
+  ms_rec_start = ms_now;
   return vox_merge->start_recording(TCHAR_TO_ANSI(*_path_out));
 }
 void AStreamingActor::StopRecordingVoxelVideo()

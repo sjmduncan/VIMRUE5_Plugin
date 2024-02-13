@@ -73,6 +73,20 @@ void AVideoActor::Tick(float DeltaTime)
       player->stop();
       for (auto& astrm : as) astrm->Pause();
     }
+
+    if(player->state() == VoxVidPlayer::PlayState::Playing)
+    {
+      Pose p;
+
+      if(player->get_pose(p))
+      {
+        UE_LOG(VIMRLog, Log, TEXT("GetPose Worked"));
+        FQuat r{p.qw(), p.qx(), p.qy(), p.qz()};
+        FVector t{p.x(), p.y(), p.z()};
+        FTransform tx(r, t);
+        SetActorTransform(tx);
+      }
+    }
   }
 }
 
