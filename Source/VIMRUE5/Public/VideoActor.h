@@ -61,8 +61,6 @@ public:
   UFUNCTION(BlueprintNativeEvent)
 	void loadProgress(int currentFrame, int totalFrames);
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMRVideo")
-	FSoundAttenuationSettings attenuation;
 protected:
 	bool loop_next_tick = false;
 	bool end_next_tick = false;

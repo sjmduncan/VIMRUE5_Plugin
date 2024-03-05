@@ -80,7 +80,6 @@ void AVideoActor::Tick(float DeltaTime)
 
       if(player->get_pose(p))
       {
-        UE_LOG(VIMRLog, Log, TEXT("GetPose Worked"));
         FQuat r{p.qw(), p.qx(), p.qy(), p.qz()};
         FVector t{p.x(), p.y(), p.z()};
         FTransform tx(r, t);
@@ -198,7 +197,7 @@ bool AVideoActor::AddVideoFile(const FString& VX5Path)
   {
     UE_LOG(VIMRLog, Log, TEXT("Loading VoxelVideo - started loading file: %s"), *VX5FullPath);
     SetHUDText(FString::Printf(TEXT("Started loading file: %s"), *VX5FullPath));
-    VideoTitle = FString(TEXT("Ballylochlan Duet"));
+    VideoTitle = FString(ANSI_TO_TCHAR(players[VX5Path]->metadata.title));
     Duration = players[VX5Path]->metadata.runtime_sec;
     FrameCount = players[VX5Path]->metadata.total_frames;
     std::string base_audio_path = players[VX5Path]->metadata.base_audio_path;
@@ -213,6 +212,17 @@ bool AVideoActor::AddVideoFile(const FString& VX5Path)
       std::string audiopath = base_audio_path + "\\\\" + players[VX5Path]->metadata.astrms[i].file_name;
       if(newSource->LoadWav(ANSI_TO_TCHAR(audiopath.c_str()), players[VX5Path]->metadata.astrms[i].directional))
       {
+        if(players[VX5Path]->metadata.astrms[i].pose)
+        {
+          const auto * p = players[VX5Path]->metadata.astrms[i].pose;
+          FVector translation(p[0], p[1], p[2]);
+          FQuat rotation(p[3], p[4], p[5], p[6]);
+          FTransform transform(rotation, translation);
+          newSource->SetRelativeTransform(transform);
+          UE_LOG(VIMRLog, Log,TEXT("Set relative audio ransform: [%f %f %f %f %f %f %f]"), 
+            translation.X, translation.Y, translation.Z,
+            rotation.W, rotation.X, rotation.Y, rotation.Z);
+        }
         newSource->CreationMethod = EComponentCreationMethod::Instance;
         newSource->VoxelLabel = FString(ANSI_TO_TCHAR(players[VX5Path]->metadata.astrms[i].voxel_label));
         newSource->Start();
