@@ -14,7 +14,10 @@ AVideoActor::AVideoActor()
 
 void AVideoActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
-  //
+  for(auto& p : players)
+  {
+    if(p.second) p.second->close();
+  }
   Super::EndPlay(EndPlayReason);
 }
 
