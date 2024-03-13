@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "VIMRActor.h"
 #include "VIMR/merge_component_safe.hpp"
+#include <iostream>
 #include "StreamingActor.generated.h"
 
 /**
@@ -46,8 +47,11 @@ public:
   bool IsVoxelVideoRecording();
   
   unsigned long long ms_rec_start{};
+
+  UFUNCTION(BlueprintCallable, Category = "VIMRStream")
+  bool RecordSlideChange(int slide);
 protected:
   virtual void BeginPlay() override;
   VIMR::VoxMergeUESafe *vox_merge = nullptr;
-
+  std::ofstream slides_file_out;
 };

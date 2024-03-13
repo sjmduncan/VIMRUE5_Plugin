@@ -6,6 +6,7 @@
 void AStreamingActor::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
   Super::EndPlay(EndPlayReason);
+  slides_file_out.close();
   delete vox_merge;
 }
 
@@ -115,16 +116,28 @@ bool AStreamingActor::RecordVoxelVideo(FString _path_out)
 {
   if(!vox_merge) return false;
   ms_rec_start = ms_now;
+  slides_file_out.open(TCHAR_TO_ANSI(*(_path_out + FString(".slides.csv"))), std::ios_base::out);
   return vox_merge->start_recording(TCHAR_TO_ANSI(*_path_out));
 }
 void AStreamingActor::StopRecordingVoxelVideo()
 {
   if(vox_merge) vox_merge->stop_recording();
+  slides_file_out.close();
 }
 
 bool AStreamingActor::IsVoxelVideoRecording()
 {
   if(vox_merge) return vox_merge->is_recording();
+  return false;
+}
+
+bool AStreamingActor::RecordSlideChange(int slide)
+{
+  const auto t = ms_now - ms_rec_start;
+  if(slides_file_out.is_open())
+  {
+    slides_file_out << std::to_string(t) << "," << std::to_string(slide) << std::endl;
+  }
   return false;
 }
 
