@@ -136,7 +136,7 @@ bool AStreamingActor::RecordSlideChange(int slide)
   const auto t = ms_now - ms_rec_start;
   if(slides_file_out.is_open())
   {
-    slides_file_out << std::to_string(t) << "," << std::to_string(slide) << std::endl;
+    slides_file_out << std::to_string(t) << " " << std::to_string(slide) << std::endl;
   }
   return false;
 }

@@ -61,6 +61,9 @@ public:
   UFUNCTION(BlueprintNativeEvent)
 	void loadProgress(int currentFrame, int totalFrames);
 
+	UFUNCTION(BlueprintCallable, Category = "VIMRVideo")
+	int GetSlide();
+
 protected:
 	bool loop_next_tick = false;
 	bool end_next_tick = false;
@@ -68,6 +71,8 @@ protected:
   virtual void BeginPlay() override;
   std::map<FString, VIMR::VoxVidPlayer*> players;
 	std::map<FString, TArray<UAudioSource*>> AudioStreams;
+	std::map<FString, TArray<std::pair<int,int>>> slidetimes;
+	std::map<FString, int> slideidx;
 	FString qActiveVideo;
 	UPROPERTY(BlueprintReadOnly, Category = "VIMRVideo")
 	FString ActiveVideo;

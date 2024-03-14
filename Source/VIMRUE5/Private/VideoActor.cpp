@@ -2,6 +2,9 @@
 
 
 #include "VideoActor.h"
+
+#include <filesystem>
+#include <fstream>
 #include "Engine.h"
 #include "VIMRUE5.h"
 
@@ -184,6 +187,23 @@ bool AVideoActor::AddVideoFile(const FString& VX5Path)
       loadProgress(_cf, _nf); 
     },
     BufferSize);
+  const auto slides_file = std::string(TCHAR_TO_ANSI(*VX5FullPath)) + ".slides.csv";
+  if(std::filesystem::exists(slides_file))
+  {
+    slideidx[VX5Path] = 0;
+      slidetimes[VX5Path] = TArray<std::pair<int,int>>();
+      std::ifstream sfile(slides_file);
+      while(sfile.good())
+      {
+        std::string ts, n;
+        sfile >> ts >> n;
+        int ti = std::atoi(ts.c_str());
+        int ni = std::atoi(n.c_str());
+        slidetimes[VX5Path].Emplace(std::pair<int,int>(ti,ni));
+        UE_LOG(VIMRLog, Error, TEXT("slide %i at %llu ms"), ni, ti);
+      }
+      sfile.close();
+  }
 
 
   const auto ansipath = TCHAR_TO_ANSI(*VX5FullPath);
@@ -239,6 +259,21 @@ bool AVideoActor::AddVideoFile(const FString& VX5Path)
 void AVideoActor::ClearFrame()
 {
   for(auto & rb : *current_render_buffer) rb.VoxelCount = 0;
+}
+
+int AVideoActor::GetSlide()
+{
+  if(ActiveVideo.IsEmpty()) return -4;
+  if(!players.contains(ActiveVideo)) return -4;
+  if(!players[ActiveVideo]) return -4;
+  const auto ms_since_start = players[ActiveVideo]->get_elapsed();
+  while(slideidx[ActiveVideo] < slidetimes[ActiveVideo].Num() && slidetimes[ActiveVideo][slideidx[ActiveVideo]].first < ms_since_start)
+    slideidx[ActiveVideo] ++ ;
+
+
+  if(slideidx[ActiveVideo] < slidetimes[ActiveVideo].Num()) return slidetimes[ActiveVideo][slideidx[ActiveVideo]].second;
+
+  return -4;
 }
 
 void AVideoActor::BeginPlay()
