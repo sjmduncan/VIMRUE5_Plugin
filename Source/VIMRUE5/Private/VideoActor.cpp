@@ -86,7 +86,7 @@ void AVideoActor::Tick(float DeltaTime)
 
       if(player->get_pose(p))
       {
-        FQuat r{p.qw(), p.qx(), p.qy(), p.qz()};
+        FQuat r{p.qx(), p.qy(), p.qz(),p.qw()};
         FVector t{p.x(), p.y(), p.z()};
         FTransform tx(r, t);
         SetActorTransform(tx);
@@ -203,6 +203,7 @@ bool AVideoActor::AddVideoFile(const FString& VX5Path)
         UE_LOG(VIMRLog, Error, TEXT("slide %i at %llu ms"), ni, ti);
       }
       sfile.close();
+    HasSlides = slidetimes[VX5Path].Num() > 0;
   }
 
 

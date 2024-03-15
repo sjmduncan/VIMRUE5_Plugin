@@ -64,6 +64,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "VIMRVideo")
 	int GetSlide();
 
+  UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMRVideo")
+	bool HasSlides = false;
+
 protected:
 	bool loop_next_tick = false;
 	bool end_next_tick = false;
