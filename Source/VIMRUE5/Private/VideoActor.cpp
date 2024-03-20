@@ -3,6 +3,7 @@
 
 #include "VideoActor.h"
 
+
 #include <filesystem>
 #include <fstream>
 #include "Engine.h"
@@ -137,7 +138,19 @@ bool AVideoActor::AddVideoFile(const FString& VX5Path)
     return false;
   }
   FString VX5FullPath;
-  if(FPaths::IsRelative(*VX5Path))
+if(VoxvidRootPath.IsEmpty())
+  {
+    const auto ProjectContentDir =   FPaths::ProjectContentDir();
+    const FString VoxvidSubFolder = "VoxelVideos";
+    VoxvidRootPath = FPaths::Combine(ProjectContentDir, VoxvidSubFolder);
+    UE_LOG(VIMRLog, Log, TEXT("VoxvidRootPath=%s"), *VoxvidRootPath);
+    
+  }else
+  {
+    UE_LOG(VIMRLog, Warning, TEXT("VoxvidRootPath=%s (not safe to package)"), *VoxvidRootPath);
+  }
+  const auto tmp_p = std::filesystem::path(TCHAR_TO_ANSI(*VX5Path));
+  if(true)//Fixme neither FPaths or std::filesystem seem to know what a non-absolute path is. tmp_p.is_relative())
   {
     VX5FullPath = FPaths::Combine(VoxvidRootPath, VX5Path);
   } else
