@@ -81,7 +81,7 @@ void AVideoActor::Tick(float DeltaTime)
       for (auto& astrm : as) astrm->Pause();
     }
 
-    if(player->state() == VoxVidPlayer::PlayState::Playing)
+    if(UpdatePose && player->state() == VoxVidPlayer::PlayState::Playing)
     {
       Pose p;
 
@@ -292,6 +292,21 @@ int AVideoActor::GetSlide()
 
 void AVideoActor::BeginPlay()
 {
+  FString PlayVoxVidPath;
+  if(FParse::Value(FCommandLine::Get(), TEXT("PlayVoxelVideo"), PlayVoxVidPath, false))
+  {
+    FString path,filename,extn;
+    FPaths::Split(PlayVoxVidPath, path, filename, extn);
+    VoxvidRootPath = path;
+    if(FPaths::FileExists(PlayVoxVidPath))
+    {
+      SetActive(filename + "." + extn);
+      ShowPlaceholderFrame = true;
+    }else
+    {
+      SetHUDText(FString::Printf(TEXT("File does not exist: %s"), *PlayVoxVidPath));
+    }
+  }
   if(VoxvidRootPath.IsEmpty())
   {
     const auto ProjectContentDir =   FPaths::ProjectContentDir();

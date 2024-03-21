@@ -37,6 +37,9 @@ public:
 	// Set this value to play or pause the video
   UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMRVideo")
 	bool Play = false;
+  // Set this to true to update the pose of the voxelvideo with recorded poses.
+  UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMRVideo")
+	bool UpdatePose = true;
   // Show a placeholder frame before starting (either the first frame, or if the video is paused 
   UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMRVideo")
 	bool ShowPlaceholderFrame = false;
