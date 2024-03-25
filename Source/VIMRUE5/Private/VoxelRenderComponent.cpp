@@ -7,10 +7,11 @@ UVoxelRenderComponent::UVoxelRenderComponent(const FObjectInitializer& ObjectIni
 : Super(ObjectInitializer)
 {
 	PrimaryComponentTick.bCanEverTick = true;
-
+	FString rName;
+	GetName(rName);
 	for(int i = 0; i < MAX_RENDERER_VOXELS / SUB_VOXEL_COUNT; i++)
 	{
-		UVoxelRenderSubComponent* VRSC = ObjectInitializer.CreateDefaultSubobject<UVoxelRenderSubComponent>(this, FName(*(FString::Printf(TEXT("VoxelSubRender%d"), i))));
+		UVoxelRenderSubComponent* VRSC = ObjectInitializer.CreateDefaultSubobject<UVoxelRenderSubComponent>(this, FName(*(FString::Printf(TEXT("%sVoxelSubRender%d"), *rName, i))));
 		VRSC->SetupAttachment(GetAttachmentRoot());
 		VoxelRenderers.Add(VRSC);
 	}
@@ -106,4 +107,43 @@ void UVoxelRenderComponent::SetRotation(FVector Rotation)
 	{
 		VRSC->SetRotation(Rotation);
 	}
+}
+
+void UVoxelRenderComponent::SetFadeEnabled(bool enabled)
+{
+	for (auto& VRSC : VoxelRenderers)
+	{
+		VRSC->SetFadeEnabled(enabled);
+	}
+}
+
+bool UVoxelRenderComponent::GetFadeEnabled()
+{
+	return VoxelRenderers[0]->GetFadeEnabled();
+}
+
+void UVoxelRenderComponent::SetFadeSpeed(float speed)
+{
+	for (auto& VRSC : VoxelRenderers)
+	{
+		VRSC->SetFadeSpeed(speed);
+	}
+}
+
+float UVoxelRenderComponent::GetFadeSpeed()
+{
+	return VoxelRenderers[0]->GetFadeSpeed();
+}
+
+void UVoxelRenderComponent::SetFadeCosAng(float cosAng)
+{
+	for (auto& VRSC : VoxelRenderers)
+	{
+		VRSC->SetFadeCosAng(cosAng);
+	}
+}
+
+float UVoxelRenderComponent::GetFadeCosAng()
+{
+	return VoxelRenderers[0]->GetFadeCosAng();
 }

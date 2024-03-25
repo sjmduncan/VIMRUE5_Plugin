@@ -31,6 +31,21 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "VIMRRender")
 	void SetRotation(FVector Rotation);
 
+	UFUNCTION(BlueprintCallable, Category = "VIMRRender")
+	void SetFadeEnabled(bool enabled);
+  UFUNCTION(BlueprintCallable, Category = "VIMRRender")
+	bool GetFadeEnabled();
+
+	UFUNCTION(BlueprintCallable, Category = "VIMRRender")
+	void SetFadeSpeed(float speed);
+	UFUNCTION(BlueprintCallable, Category = "VIMRRender")
+	float GetFadeSpeed();
+
+	UFUNCTION(BlueprintCallable, Category = "VIMRRender")
+	void SetFadeCosAng(float cosAng);
+	UFUNCTION(BlueprintCallable, Category = "VIMRRender")
+	float GetFadeCosAng();
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Default)
 	TScriptInterface<IVoxelSourceInterface> VoxelSource;
 

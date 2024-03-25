@@ -278,7 +278,6 @@ void AVideoActor::ClearFrame()
 int AVideoActor::GetSlide()
 {
   if(ActiveVideo.IsEmpty()) return -4;
-  if(!players.contains(ActiveVideo)) return -4;
   if(!players[ActiveVideo]) return -4;
   const auto ms_since_start = players[ActiveVideo]->get_elapsed();
   while(slideidx[ActiveVideo] < slidetimes[ActiveVideo].Num() && slidetimes[ActiveVideo][slideidx[ActiveVideo]].first < ms_since_start)

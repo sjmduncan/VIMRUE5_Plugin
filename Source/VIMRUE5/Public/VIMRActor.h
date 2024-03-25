@@ -46,9 +46,6 @@ public:
 	int NumVoxels = 1 * MAX_RENDERER_VOXELS;
 	//The minimum number of voxel render components required to render all the voxels (computed from NumVoxels)
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
-	int NumRenderers = 1;
-	//The minimum number of voxel render components required to render all the voxels (computed from NumVoxels)
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "VIMR")
 	int NumBuffersPerrenderer = 4;
 	// Where to load the VIMR configuration file from
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMR")
@@ -102,17 +99,25 @@ public:
 	TMap<int32, FTransform> VRDevicePoses;
 	UFUNCTION(BlueprintCallable, Category = "VIMR")
 	bool InitVimrComponent(FString _VNetIDSuffix);
+
+  UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMR")
+	bool GreyFade = true;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMR")
+	float GreyFadeCosAngle = 0;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMR")
+	float GreyFadeSpeed = 10;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMR")
+	UStaticMeshComponent *root;
+	UPROPERTY(BlueprintReadOnly, VisibleInstanceOnly, Category = "VIMR")
+	TArray<UVoxelRenderComponent*> renderers;
 protected:
-	bool useLocalConfig = false;
 	void CopyVoxelsToRenderBuffer(VIMR::VoxelMessage& _v);
 	RingBuffer<TArray<RenderBuffer>> * tmp_render_buffers;
 	TArray<RenderBuffer> * current_render_buffer;
 	TArray<RenderBuffer*> buffers_to_delete;
-	// Root component of the VIMR actor
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "VIMR")
-	UStaticMeshComponent *root;
-	UPROPERTY(BlueprintReadOnly, VisibleInstanceOnly, Category = "VIMR")
-	TArray<UVoxelRenderComponent*> renders;
 
 	unsigned long long frame_update_timestamp = 0;
 

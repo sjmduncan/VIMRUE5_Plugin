@@ -180,6 +180,66 @@ void UVoxelRenderSubComponent::SetParticleSize(float particleSize)
 	}
 }
 
+void UVoxelRenderSubComponent::SetFadeSpeed(float speed)
+{
+	 if (speed != this->fFadeSpeed) {
+		this->fFadeSpeed = speed;;
+		if (Material != nullptr)
+		{
+			Material->SetScalarParameterValue(FName("GreyOutSpeed"), speed);
+		}
+		else
+		{
+			bQueueParticleSize = true;
+		}
+	}
+}
+
+float UVoxelRenderSubComponent::GetFadeSpeed()
+{
+	return this->fFadeSpeed;
+}
+
+void UVoxelRenderSubComponent::SetFadeEnabled(bool enabled)
+{
+  if (enabled != this->bFadeEnabled) {
+		this->bFadeEnabled = enabled;
+		if (Material != nullptr)
+		{
+			Material->SetScalarParameterValue(FName("GreyOutEnabled"), enabled * 1);
+		}
+		else
+		{
+			bQueueParticleSize = true;
+		}
+	}
+}
+
+bool UVoxelRenderSubComponent::GetFadeEnabled()
+{
+	return this->bFadeEnabled;
+}
+
+void UVoxelRenderSubComponent::SetFadeCosAng(float cosAng)
+{
+	if (cosAng != this->fFadeCosAngle) {
+		this->fFadeCosAngle = cosAng;
+		if (Material != nullptr)
+		{
+			Material->SetScalarParameterValue(FName("GreyOutCosAngle"), cosAng);
+		}
+		else
+		{
+			bQueueParticleSize = true;
+		}
+	}
+}
+
+float UVoxelRenderSubComponent::GetFadeCosAng()
+{
+	return this->fFadeCosAngle;
+}
+
 void UVoxelRenderSubComponent::SetLocation(FVector location)
 {
 	this->Location = location;

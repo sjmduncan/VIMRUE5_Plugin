@@ -15,20 +15,25 @@ AVIMRActor::AVIMRActor()
   // Adding stuff outside of the construtor not work
   // renders.Num == 5 after BeginPlay when fewer than 5 elements are added.
 	PrimaryActorTick.bCanEverTick = true;
-	NumRenderers = FMath::CeilToInt((float)NumVoxels / MAX_RENDERER_VOXELS);
-  root = CreateDefaultSubobject<UStaticMeshComponent>("RenderGroup");
+	const auto NumRenderers = FMath::CeilToInt((float)NumVoxels / MAX_RENDERER_VOXELS);
+  InitFrameBuffers();
+  const auto Actor_ms = ms_now;
+  FString rootName = "Render" + GetName()  + FString::FromInt(Actor_ms) +"-root";
+  root = CreateDefaultSubobject<UStaticMeshComponent>(*rootName);
   root->SetRelativeTransform({});
   root->Mobility = EComponentMobility::Movable;
-  InitFrameBuffers();
-	for(int i=0; i<NumRenderers; i++)
-	{
-		FString name = "Render" + FString::FromInt(i);
+  SetRootComponent(root);
+  for(int i=0; i<NumRenderers; i++)
+  {
+    FString name = "Render" + GetName() + FString::FromInt(Actor_ms) + "-" + FString::FromInt(i);
     auto * renderer = CreateDefaultSubobject<UVoxelRenderComponent>(*name);
-		renderer->RendererIdx = i;
-		renderer->VoxelSource = this;
+//    renderer->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+    renderer->RendererIdx = i;
+    renderer->VoxelSource = this;
     renderer->Mobility = EComponentMobility::Movable;
-		renders.Add(renderer);
-	}
+    renderers.Add(renderer);
+    UE_LOG(VIMRLog, Warning, TEXT("Renderer name %s, owner name %s"), *name, *GetName());
+  }
   DefaultSoundAttenuation = CreateDefaultSubobject<USoundAttenuation>("DefaultSoundAttenuation");
   UpdateVoxelPos();
 }
@@ -62,6 +67,24 @@ void AVIMRActor::BeginPlay()
       UE_LOG(VIMRLog, Warning, TEXT("HUD Class is not 'VIMRHUD', can't display VIMR messages on HUD"));
     }
   }
+    for (auto r : renderers) if (r) r->SetFadeEnabled(GreyFade);
+    else{
+      UE_LOG(VIMRLog, Warning, TEXT("Can't set greyFade, renderer is null"));
+      GreyFade = renderers[0]->GetFadeEnabled();
+    }
+
+    for (auto r : renderers) if (r) r->SetFadeCosAng(GreyFadeCosAngle);
+    else{
+      UE_LOG(VIMRLog, Warning, TEXT("Can't set GreyFadeCosAngle, renderer is null"));
+      GreyFadeCosAngle = renderers[0]->GetFadeCosAng();
+    }
+
+    for (auto r : renderers) if (r) r->SetFadeSpeed(GreyFadeSpeed);
+    else{
+      UE_LOG(VIMRLog, Warning, TEXT("Can't set GreyFadeSpeed, renderer is null"));
+      GreyFadeSpeed = renderers[0]->GetFadeSpeed();
+    }
+
   InitFrameBuffers();
   //InitVimrComponent();
   Super::BeginPlay();
@@ -216,7 +239,7 @@ void AVIMRActor::CopyVoxelsToRenderBuffer(VIMR::VoxelMessage& _v)
         pos_idx = 0;
       }
 
-      if(render_idx >= NumRenderers) break;
+      if(render_idx >= renderers.Num()) break;
 
     v = _v.octree.get_next_voxel();
   }
@@ -241,7 +264,7 @@ void AVIMRActor::InitFrameBuffers()
   tmp_render_buffers = new RingBuffer<TArray<RenderBuffer>>(NumBuffersPerrenderer);
   for (int i = 0; i < NumBuffersPerrenderer; i++) {
     current_render_buffer = tmp_render_buffers->current_head();
-    for(int j = 0; j< NumRenderers; j++)
+    for(const auto r : renderers)
     {
       current_render_buffer->Add(RenderBuffer{});
       current_render_buffer->Last().CoarsePositionData = new uint8[MAX_RENDERER_VOXELS * VOXEL_TEXTURE_BPP]();
@@ -282,13 +305,13 @@ void AVIMRActor::UpdateVoxelPos()
 
   const auto tx = GetActorTransform();
   const auto rr = tx.GetRotation().Rotator();
-  for(const auto & r : renders){
-    if(!r)
-      continue;
-    r->SetWorldLocation(FVector(0,0,0));
-    r->SetWorldRotation(FRotator(0,0,0));
-    r->SetLocation(tx.GetLocation());
-    r->SetRotation(FVector(0, -rr.Pitch / 360, rr.Yaw / 360.0));
+  for(auto r: renderers){
+    if(r){
+      r->SetWorldLocation(FVector(0, 0, 0));
+      r->SetWorldRotation(FRotator(0, 0, 0));
+      r->SetLocation(tx.GetLocation());
+      r->SetRotation(FVector(0, -rr.Pitch / 360, rr.Yaw / 360.0));
+    }
   }
 }
 
@@ -345,6 +368,28 @@ void AVIMRActor::Tick(float DeltaTime)
   }
   //GetVRDevicePoses();
   UpdateVoxelPos();
+  if(GreyFade != renderers[0]->GetFadeEnabled()){
+    for (auto r : renderers) if (r) r->SetFadeEnabled(GreyFade);
+    else{
+      UE_LOG(VIMRLog, Warning, TEXT("Can't set greyFade, renderer is null"));
+      GreyFade = renderers[0]->GetFadeEnabled();
+    }
+  }
+
+  if(GreyFadeCosAngle != renderers[0]->GetFadeCosAng()){
+    for (auto r : renderers) if (r) r->SetFadeCosAng(GreyFadeCosAngle);
+    else{
+      UE_LOG(VIMRLog, Warning, TEXT("Can't set GreyFadeCosAngle, renderer is null"));
+      GreyFadeCosAngle = renderers[0]->GetFadeCosAng();
+    }
+  }
+  if(GreyFadeSpeed != renderers[0]->GetFadeSpeed()){
+    for (auto r : renderers) if (r) r->SetFadeSpeed(GreyFadeSpeed);
+    else{
+      UE_LOG(VIMRLog, Warning, TEXT("Can't set GreyFadeSpeed, renderer is null"));
+      GreyFadeSpeed = renderers[0]->GetFadeSpeed();
+    }
+  }
 }
 
 void AVIMRActor::GetFramePointers(int& VoxelCount, uint8*& CoarsePositionData, uint8*& PositionData,  uint8*& ColourData, uint8& Voxelmm, float& particleSize, int& RendererIdx)

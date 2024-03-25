@@ -31,6 +31,15 @@ public:
 
 	void SetParticleSize(float particleSize);
 
+	void SetFadeSpeed(float speed);
+	float GetFadeSpeed();
+
+	void SetFadeEnabled(bool enabled);
+	bool GetFadeEnabled();
+
+	void SetFadeCosAng(float cosAng);
+	float GetFadeCosAng();
+
 	void SetLocation(FVector Location);
 
 	void SetRotation(FVector Rotation);
@@ -58,6 +67,9 @@ private:
   bool bQueueParticleSize= false;
 	bool bQueueLocation = false;
 	bool bQueueRotation = false;
+	bool bFadeEnabled = true;
+	float fFadeSpeed = 10;
+	float fFadeCosAngle = 0;
 	float Scale = 1.0f;
 	float ParticleSize = 1.0f;
 	FVector Location{};
