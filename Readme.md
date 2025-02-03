@@ -1,6 +1,6 @@
 # VIMRUE5_Plugin
 
-Make the following changes to the config files to get telepresence working:
+You need to edit `DefaultEngine` and `DefaultGame.ini` to get telepresence working. **If you're not using Steam, and only want LAN telepresence** then remove all the lines and sections which mention Steam.
 
 **`DefaultEngine.ini`**
 
