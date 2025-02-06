@@ -6,8 +6,9 @@
 #include "VoxelRenderComponent.generated.h"
 
 
-#define MAX_RENDERER_VOXELS 16384
-//12*16384 = 196608 = max voxels per renderer
+#define MAX_RENDERER_VOXELS (12 * 16384)
+//12*16384 = 196608 = absolute max voxels per renderer
+//To further increase max voxel count change the NumVoxels variable in VIMRActor.h
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class VIMRUE5_API UVoxelRenderComponent : public USceneComponent
