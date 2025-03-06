@@ -1,4 +1,3 @@
-
 1. Make sure that you have `Plugins/AdvancedSteamSessions` from [AdvancedSessionsPlugin](https://github.com/mordentral/AdvancedSessionsPlugin) 
 2. Edit `config/DefaultEngine.ini` and `config/DefaultGame.ini`
 

@@ -1,5 +1,4 @@
-
-1. Edit `config/DefaultEngine.ini` and `config/DefaultGame.ini`
+Edit `config/DefaultEngine.ini` and `config/DefaultGame.ini`
 
 **`DefaultEngine.ini`**
 
